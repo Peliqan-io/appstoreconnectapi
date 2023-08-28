@@ -72,10 +72,7 @@ class Api:
 			self._submit_stats("session_end")
 
 	def _generate_token(self):
-		temp = self.key_file
-		key = ""
-		for i in temp.split('\\n'):
-			key+=i
+		key = self.key_file
 		self.token_gen_date = datetime.now()
 		exp = int(time.mktime((self.token_gen_date + timedelta(minutes=20)).timetuple()))
 		return jwt.encode({'iss': self.issuer_id, 'exp': exp, 'aud': 'appstoreconnect-v1'}, key,
