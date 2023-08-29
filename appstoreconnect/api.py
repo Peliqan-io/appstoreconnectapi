@@ -17,8 +17,6 @@ from .__version__ import __version__ as version
 ALGORITHM = 'ES256'
 BASE_API = "https://api.appstoreconnect.apple.com"
 
-LOGGER = LOGGER = singer.get_logger()
-
 
 class UserRole(Enum):
 	ADMIN = auto()
