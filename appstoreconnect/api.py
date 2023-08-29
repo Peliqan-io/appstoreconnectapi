@@ -76,6 +76,7 @@ class Api:
 	def _generate_token(self):
 		key = self.key_file
 		LOGGER.info(key)
+		LOGGER.info(str(key))
 		self.token_gen_date = datetime.now()
 		exp = int(time.mktime((self.token_gen_date + timedelta(minutes=20)).timetuple()))
 		return jwt.encode({'iss': self.issuer_id, 'exp': exp, 'aud': 'appstoreconnect-v1'}, key,
