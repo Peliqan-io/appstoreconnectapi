@@ -10,12 +10,14 @@ import time
 import json
 from typing import List
 from enum import Enum, auto
-
+import singer
 from .resources import *
 from .__version__ import __version__ as version
 
 ALGORITHM = 'ES256'
 BASE_API = "https://api.appstoreconnect.apple.com"
+
+LOGGER = singer.logger()
 
 
 class UserRole(Enum):
@@ -73,6 +75,7 @@ class Api:
 
 	def _generate_token(self):
 		key = self.key_file
+		LOGGER.info(key)
 		self.token_gen_date = datetime.now()
 		exp = int(time.mktime((self.token_gen_date + timedelta(minutes=20)).timetuple()))
 		return jwt.encode({'iss': self.issuer_id, 'exp': exp, 'aud': 'appstoreconnect-v1'}, key,
