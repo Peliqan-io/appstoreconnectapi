@@ -19,7 +19,10 @@ Usage
 
 Please follow instructions on [Apple documentation](https://developer.apple.com/documentation/appstoreconnectapi/creating_api_keys_for_app_store_connect_api) on how to generate an API key.
 
-With your *key ID*, *key file* (make sure to enter content of it as a string) and *issuer ID* create a new API instance:
+With your *key ID*, *key file*  (make sure to enter content of it as a string) and *issuer ID* create a new API instance:
+
+> [!IMPORTANT]
+> key_file is private key(.p8 format) passed as string.
 
 ```python
 from appstoreconnect import Api, UserRole
