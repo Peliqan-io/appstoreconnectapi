@@ -19,17 +19,20 @@ Usage
 
 Please follow instructions on [Apple documentation](https://developer.apple.com/documentation/appstoreconnectapi/creating_api_keys_for_app_store_connect_api) on how to generate an API key.
 
-With your *key ID*, *key file* (you can either pass the path to the file or the content of it as a string) and *issuer ID* create a new API instance:
+With your *key ID*, *key file*  (make sure to enter content of it as a string) and *issuer ID* create a new API instance:
+
+> [!IMPORTANT]
+> key_file is private key(.p8 format) passed as string.
 
 ```python
 from appstoreconnect import Api, UserRole
-api = Api(key_id, path_to_key_file, issuer_id)
+api = Api(key_id, key_file, issuer_id)
 
 # use a proxy
-api = Api(key_id, path_to_key_file, issuer_id, proxy='http://1.2.3.4:3128')
+api = Api(key_id, key_file, issuer_id, proxy='http://1.2.3.4:3128')
 
 # set a timeout (in seconds) for requests
-api = Api(key_id, path_to_key_file, issuer_id, timeout=42)
+api = Api(key_id, key_file, issuer_id, timeout=42)
 ```
 
 Here are a few examples of API usage. For a complete list of available methods please see [api.py](https://github.com/Ponytech/appstoreconnectapi/blob/master/appstoreconnect/api.py#L148).
@@ -78,7 +81,7 @@ api.download_finance_reports(filters={'vendorNumber': '123456789', 'reportDate':
 Define a timeout (in seconds) after which an exception is raised if no response is received. 
 
 ```python
-api = Api(key_id, path_to_key_file, issuer_id, timeout=30)
+api = Api(key_id, key_file, issuer_id, timeout=30)
 api.list_apps()
 
 APIError: Read timeout after 30 seconds
@@ -102,7 +105,7 @@ You can review the [source code](https://github.com/Ponytech/appstoreconnectapi/
 If you feel uncomfortable with it you can completely opt-out by initliazing the API with:
 
 ```python
-api = Api(key_id, path_to_key_file, issuer_id, submit_stats=False)
+api = Api(key_id, key_file, issuer_id, submit_stats=False)
 ```
 
 The is also an [open issue](https://github.com/Ponytech/appstoreconnectapi/issues/18) about this topic where we would love to here your feedback and best practices.

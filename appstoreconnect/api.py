@@ -10,7 +10,6 @@ import time
 import json
 from typing import List
 from enum import Enum, auto
-
 from .resources import *
 from .__version__ import __version__ as version
 
@@ -72,10 +71,7 @@ class Api:
 			self._submit_stats("session_end")
 
 	def _generate_token(self):
-		try:
-			key = open(self.key_file, 'r').read()
-		except IOError as e:
-			key = self.key_file
+		key = self.key_file
 		self.token_gen_date = datetime.now()
 		exp = int(time.mktime((self.token_gen_date + timedelta(minutes=20)).timetuple()))
 		return jwt.encode({'iss': self.issuer_id, 'exp': exp, 'aud': 'appstoreconnect-v1'}, key,
