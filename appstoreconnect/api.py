@@ -10,7 +10,6 @@ import time
 import json
 from typing import List
 from enum import Enum, auto
-import singer
 from .resources import *
 from .__version__ import __version__ as version
 
