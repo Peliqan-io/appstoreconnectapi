@@ -49,14 +49,13 @@ class APIError(Exception):
 
 class Api:
 
-	def __init__(self, key_id, key_file, issuer_id, submit_stats=False, timeout=None, proxy=None):
+	def __init__(self, key_id, key_file, issuer_id, timeout=None, proxy=None):
 		self._token = None
 		self.token_gen_date = None
 		self.exp = None
 		self.key_id = key_id
 		self.key_file = key_file
 		self.issuer_id = issuer_id
-		self.submit_stats = False 		#avoiding sending anonymous data
 		self.timeout = timeout
 		self.proxy = proxy
 		self._call_stats = defaultdict(int)
