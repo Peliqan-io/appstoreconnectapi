@@ -49,26 +49,22 @@ class APIError(Exception):
 
 class Api:
 
-	def __init__(self, key_id, key_file, issuer_id, submit_stats=True, timeout=None, proxy=None):
+	def __init__(self, key_id, key_file, issuer_id, timeout=None, proxy=None):
 		self._token = None
 		self.token_gen_date = None
 		self.exp = None
 		self.key_id = key_id
 		self.key_file = key_file
 		self.issuer_id = issuer_id
-		self.submit_stats = submit_stats
 		self.timeout = timeout
 		self.proxy = proxy
 		self._call_stats = defaultdict(int)
-		if self.submit_stats:
-			self._submit_stats("session_start")
 
 		self._debug = False
 		token = self.token  # generate first token
 
 	def __del__(self):
-		if self.submit_stats:
-			self._submit_stats("session_end")
+		pass
 
 	def _generate_token(self):
 		key = self.key_file
@@ -258,13 +254,6 @@ class Api:
 		if self._debug:
 			print("%s %s" % (method.value, url))
 
-		if self._submit_stats:
-			endpoint = url.replace(BASE_API, '')
-			if method in (HttpMethod.PATCH, HttpMethod.DELETE):  # remove last bit of endpoint which is a resource id
-				endpoint = "/".join(endpoint.split('/')[:-1])
-			request = "%s %s" % (method.name, endpoint)
-			self._call_stats[request] += 1
-
 		try:
 			if method == HttpMethod.GET:
 				proxies = {'https': self.proxy} if self.proxy else None
@@ -308,25 +297,6 @@ class Api:
 			if not 200 <= r.status_code <= 299:
 				raise APIError("HTTP error [%d][%s]" % (r.status_code, r.content))
 			return r
-
-	def _submit_stats(self, event_type):
-		"""
-		this submits anonymous usage statistics to help us better understand how this library is used
-		you can opt-out by initializing the client with submit_stats=False
-		"""
-		payload = {
-			'project': 'appstoreconnectapi',
-			'version': version,
-			'type': event_type,
-			'parameters': {
-				'python_version': platform.python_version(),
-				'platform': platform.platform(),
-				'issuer_id_hash': hashlib.sha1(self.issuer_id.encode()).hexdigest(),  # send anonymized hash
-			}
-		}
-		if event_type == 'session_end':
-			payload['parameters']['endpoints'] = self._call_stats
-		requests.post('https://stats.ponytech.net/new-event', json.dumps(payload))
 
 	@property
 	def token(self):
